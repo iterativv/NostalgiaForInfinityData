@@ -6,7 +6,7 @@ concurrency: 1
 
 jobs:
 
-  Binance-Exchange-Data:
+  Download-Exchange-Data:
     runs-on: ubuntu-latest
     timeout-minutes: 90
     strategy:
@@ -18,25 +18,30 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
 
-      - name: Backtesting Variables
-        id: dotenv
+      - name: Prep Git
+        run: |
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+
+      - name: Ownership Variables
+        id: ownerhip
+        run: |
+          echo '::set-output name=RUNNER_USER::$(id -u)'
+          echo '::set-output name=RUNNER_GROUP::$(id -g)'
+
+      - name: Binance Backtesting Variables
+        id: dotenv-binance
         uses: falti/dotenv-action@v0.2.6
         with:
           log-variables: true
           path:
             backtesting-binance.env
 
-      - name: Ownership Variables
-        id: ownerhip
-        run: |
-          echo '::set-output name=RUNNER_USER::$(id -u)'
-          echo '::set-output name=RUNNER_GROUP::$(id -g)'
-
       - name: Download Data
         env:
-          START_DATE: ${{ steps.dotenv.outputs.start_date }}
-          END_DATE: ${{ steps.dotenv.outputs.end_date }}
-          EXCHANGE: ${{ steps.dotenv.outputs.exchange }}
+          START_DATE: ${{ steps.dotenv-binance.outputs.start_date }}
+          END_DATE: ${{ steps.dotenv-binance.outputs.end_date }}
+          EXCHANGE: ${{ steps.dotenv-binance.outputs.exchange }}
         run: |
           docker-compose run --rm download-data
 
@@ -46,50 +51,22 @@ jobs:
 
       - name: Commit files
         run: |
-          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
-          git add data/${{ steps.dotenv.outputs.exchange }}/*.json
-          git commit -a -m "Update ${{ steps.dotenv.outputs.exchange }} exchange data from ${{ steps.dotenv.outputs.start_date }} to ${{ steps.dotenv.outputs.end_date }}"
+          git add data/${{ steps.dotenv-binance.outputs.exchange }}/*.json
+          git commit -a -m "Update ${{ steps.dotenv-binance.outputs.exchange }} exchange data from ${{ steps.dotenv-binance.outputs.start_date }} to ${{ steps.dotenv-binance.outputs.end_date }}"
 
-      - name: Push changes
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: ${{ github.ref }}
-
-  Kucoin-Exchange-Data:
-    runs-on: ubuntu-latest
-    timeout-minutes: 90
-    needs:
-      - Binance-Exchange-Data
-    strategy:
-      fail-fast: false
-
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-          persist-credentials: false
-
-      - name: Backtesting Variables
-        id: dotenv
+      - name: Kucoin Backtesting Variables
+        id: dotenv-kucoin
         uses: falti/dotenv-action@v0.2.6
         with:
           log-variables: true
           path:
             backtesting-kucoin.env
 
-      - name: Ownership Variables
-        id: ownerhip
-        run: |
-          echo '::set-output name=RUNNER_USER::$(id -u)'
-          echo '::set-output name=RUNNER_GROUP::$(id -g)'
-
       - name: Download Data
         env:
-          START_DATE: ${{ steps.dotenv.outputs.start_date }}
-          END_DATE: ${{ steps.dotenv.outputs.end_date }}
-          EXCHANGE: ${{ steps.dotenv.outputs.exchange }}
+          START_DATE: ${{ steps.dotenv-kucoin.outputs.start_date }}
+          END_DATE: ${{ steps.dotenv-kucoin.outputs.end_date }}
+          EXCHANGE: ${{ steps.dotenv-kucoin.outputs.exchange }}
         run: |
           docker-compose run --rm download-data
 
@@ -99,10 +76,8 @@ jobs:
 
       - name: Commit files
         run: |
-          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
-          git add data/${{ steps.dotenv.outputs.exchange }}/*.json
-          git commit -a -m "Update ${{ steps.dotenv.outputs.exchange }} exchange data from ${{ steps.dotenv.outputs.start_date }} to ${{ steps.dotenv.outputs.end_date }}"
+          git add data/${{ steps.dotenv-kucoin.outputs.exchange }}/*.json
+          git commit -a -m "Update ${{ steps.dotenv-kucoin.outputs.exchange }} exchange data from ${{ steps.dotenv-kucoin.outputs.start_date }} to ${{ steps.dotenv-kucoin.outputs.end_date }}"
 
       - name: Push changes
         uses: ad-m/github-push-action@master
