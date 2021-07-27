@@ -1,0 +1,14 @@
+---
+version: '3'
+services:
+  download-data:
+    image: freqtradeorg/freqtrade:develop
+    container_name: download-data
+    volumes:
+      - "./:/freqtrade/user_data"
+    command: >
+      download-data
+      --timerange ${START_DATE:-20201201}-${END_DATE:-20210701}
+      --timeframe 5m 1h
+      --config user_data/pairlists.json
+      --config user_data/${EXCHANGE:-binance}-usdt-static.json

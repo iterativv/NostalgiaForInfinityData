@@ -1,0 +1,111 @@
+name: Update Data
+
+on: [push]
+
+concurrency: 1
+
+jobs:
+
+  Binance-Exchange-Data:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Backtesting Variables
+        id: dotenv
+        uses: falti/dotenv-action@v0.2.6
+        with:
+          log-variables: true
+          path:
+            backtesting-binance.env
+
+      - name: Ownership Variables
+        id: ownerhip
+        run: |
+          echo '::set-output name=RUNNER_USER::$(id -u)'
+          echo '::set-output name=RUNNER_GROUP::$(id -g)'
+
+      - name: Download Data
+        env:
+          START_DATE: ${{ steps.dotenv.outputs.start_date }}
+          END_DATE: ${{ steps.dotenv.outputs.end_date }}
+          EXCHANGE: ${{ steps.dotenv.outputs.exchange }}
+        run: |
+          docker-compose run --rm download-data
+
+      - name: Fix File Ownership
+        run: |
+          sudo chown -R ${{ steps.ownerhip.outputs.RUNNER_USER }}:${{ steps.ownerhip.outputs.RUNNER_GROUP }} .
+
+      - name: Commit files
+        run: |
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add data/${{ steps.dotenv.outputs.exchange }}/*.json
+          git commit -a -m "Update ${{ steps.dotenv.outputs.exchange }} exchange data from ${{ steps.dotenv.outputs.start_date }} to ${{ steps.dotenv.outputs.end_date }}"
+
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
+
+  Kucoin-Exchange-Data:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    needs:
+      - Binance-Exchange-Data
+    strategy:
+      fail-fast: false
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Backtesting Variables
+        id: dotenv
+        uses: falti/dotenv-action@v0.2.6
+        with:
+          log-variables: true
+          path:
+            backtesting-kucoin.env
+
+      - name: Ownership Variables
+        id: ownerhip
+        run: |
+          echo '::set-output name=RUNNER_USER::$(id -u)'
+          echo '::set-output name=RUNNER_GROUP::$(id -g)'
+
+      - name: Download Data
+        env:
+          START_DATE: ${{ steps.dotenv.outputs.start_date }}
+          END_DATE: ${{ steps.dotenv.outputs.end_date }}
+          EXCHANGE: ${{ steps.dotenv.outputs.exchange }}
+        run: |
+          docker-compose run --rm download-data
+
+      - name: Fix File Ownership
+        run: |
+          sudo chown -R ${{ steps.ownerhip.outputs.RUNNER_USER }}:${{ steps.ownerhip.outputs.RUNNER_GROUP }} .
+
+      - name: Commit files
+        run: |
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add data/${{ steps.dotenv.outputs.exchange }}/*.json
+          git commit -a -m "Update ${{ steps.dotenv.outputs.exchange }} exchange data from ${{ steps.dotenv.outputs.start_date }} to ${{ steps.dotenv.outputs.end_date }}"
+
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
