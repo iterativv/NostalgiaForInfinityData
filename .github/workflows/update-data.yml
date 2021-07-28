@@ -24,18 +24,18 @@ jobs:
           git config --local user.name "github-actions[bot]"
 
       - name: Binance Backtesting Variables
-        id: dotenv-binance
+        id: binance-dates
         uses: falti/dotenv-action@v0.2.6
         with:
           log-variables: true
           path:
             backtesting-binance.env
 
-      - name: Download Data
+      - name: Download Binance Data (${{ steps.binance-dates.outputs.start_date }} - ${{ steps.binance-dates.outputs.end_date }})
         env:
-          START_DATE: ${{ steps.dotenv-binance.outputs.start_date }}
-          END_DATE: ${{ steps.dotenv-binance.outputs.end_date }}
-          EXCHANGE: ${{ steps.dotenv-binance.outputs.exchange }}
+          START_DATE: ${{ steps.binance-dates.outputs.start_date }}
+          END_DATE: ${{ steps.binance-dates.outputs.end_date }}
+          EXCHANGE: binance
         run: |
           docker-compose run --rm download-data
 
@@ -43,26 +43,26 @@ jobs:
         run: |
           sudo chown -R $(id -u):$(id -g) .
 
-      - name: Commit files
+      - name: Commit Binance Changed Files
         id: commit-binance-changes
         continue-on-error: true
         run: |
-          git add data/${{ steps.dotenv-binance.outputs.exchange }}/*.json
-          git commit -a -m "Update ${{ steps.dotenv-binance.outputs.exchange }} exchange data from ${{ steps.dotenv-binance.outputs.start_date }} to ${{ steps.dotenv-binance.outputs.end_date }}"
+          git add data/binance/*.json
+          git commit -a -m "Update Binance exchange data from ${{ steps.binance-dates.outputs.start_date }} to ${{ steps.binance-dates.outputs.end_date }}"
 
       - name: Kucoin Backtesting Variables
-        id: dotenv-kucoin
+        id: kucoin-dates
         uses: falti/dotenv-action@v0.2.6
         with:
           log-variables: true
           path:
             backtesting-kucoin.env
 
-      - name: Download Data
+      - name: Download Kucoin Data (${{ steps.kucoin-dates.outputs.start_date }} - ${{ steps.kucoin-dates.outputs.end_date }})
         env:
-          START_DATE: ${{ steps.dotenv-kucoin.outputs.start_date }}
-          END_DATE: ${{ steps.dotenv-kucoin.outputs.end_date }}
-          EXCHANGE: ${{ steps.dotenv-kucoin.outputs.exchange }}
+          START_DATE: ${{ steps.kucoin-dates.outputs.start_date }}
+          END_DATE: ${{ steps.kucoin-dates.outputs.end_date }}
+          EXCHANGE: kucoin
         run: |
           docker-compose run --rm download-data
 
@@ -70,12 +70,12 @@ jobs:
         run: |
           sudo chown -R $(id -u):$(id -g) .
 
-      - name: Commit files
+      - name: Commit Kucoin Changed Files
         id: commit-kucoin-changes
         continue-on-error: true
         run: |
-          git add data/${{ steps.dotenv-kucoin.outputs.exchange }}/*.json
-          git commit -a -m "Update ${{ steps.dotenv-kucoin.outputs.exchange }} exchange data from ${{ steps.dotenv-kucoin.outputs.start_date }} to ${{ steps.dotenv-kucoin.outputs.end_date }}"
+          git add data/kucoin/*.json
+          git commit -a -m "Update Kucoin exchange data from ${{ steps.kucoin-dates.outputs.start_date }} to ${{ steps.kucoin-dates.outputs.end_date }}"
 
       - name: Push changes
         uses: ad-m/github-push-action@master
