@@ -47,7 +47,7 @@ jobs:
         id: commit-binance-changes
         continue-on-error: true
         run: |
-          git add data/binance/*.json
+          git add binance/*.json
           git commit -a -m "Update Binance exchange data from ${{ steps.binance-dates.outputs.start_date }} to ${{ steps.binance-dates.outputs.end_date }}"
 
       - name: Kucoin Backtesting Variables
@@ -74,7 +74,7 @@ jobs:
         id: commit-kucoin-changes
         continue-on-error: true
         run: |
-          git add data/kucoin/*.json
+          git add kucoin/*.json
           git commit -a -m "Update Kucoin exchange data from ${{ steps.kucoin-dates.outputs.start_date }} to ${{ steps.kucoin-dates.outputs.end_date }}"
 
       - name: Push changes
