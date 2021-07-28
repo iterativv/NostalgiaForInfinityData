@@ -18,6 +18,10 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
 
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+
       - name: Prep Git
         run: |
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -43,6 +47,12 @@ jobs:
       - name: Fix File Ownership
         run: |
           sudo chown -R $(id -u):$(id -g) .
+
+      - name: Sort JSON
+        if: steps.binance-data-download.outcome == 'success'
+        run: |
+          # This is to avoid commiting changes just because the order changed
+          python .github/workflows/scripts/sort-json.py binance
 
       - name: Commit Binance Changed Files
         id: commit-binance-changes
@@ -72,6 +82,12 @@ jobs:
       - name: Fix File Ownership
         run: |
           sudo chown -R $(id -u):$(id -g) .
+
+      - name: Sort JSON
+        if: steps.kucoin-data-download.outcome == 'success'
+        run: |
+          # This is to avoid commiting changes just because the order changed
+          python .github/workflows/scripts/sort-json.py kucoin
 
       - name: Commit Kucoin Changed Files
         id: commit-kucoin-changes
