@@ -32,6 +32,7 @@ jobs:
             backtesting-binance.env
 
       - name: Download Binance Data (${{ steps.binance-dates.outputs.start_date }} - ${{ steps.binance-dates.outputs.end_date }})
+        id: binance-data-download
         env:
           START_DATE: ${{ steps.binance-dates.outputs.start_date }}
           END_DATE: ${{ steps.binance-dates.outputs.end_date }}
@@ -45,6 +46,7 @@ jobs:
 
       - name: Commit Binance Changed Files
         id: commit-binance-changes
+        if: steps.binance-data-download.outcome == 'success'
         continue-on-error: true
         run: |
           git add binance/*.json
@@ -59,6 +61,7 @@ jobs:
             backtesting-kucoin.env
 
       - name: Download Kucoin Data (${{ steps.kucoin-dates.outputs.start_date }} - ${{ steps.kucoin-dates.outputs.end_date }})
+        id: kucoin-data-download
         env:
           START_DATE: ${{ steps.kucoin-dates.outputs.start_date }}
           END_DATE: ${{ steps.kucoin-dates.outputs.end_date }}
@@ -72,6 +75,7 @@ jobs:
 
       - name: Commit Kucoin Changed Files
         id: commit-kucoin-changes
+        if: steps.kucoin-data-download.outcome == 'success'
         continue-on-error: true
         run: |
           git add kucoin/*.json
