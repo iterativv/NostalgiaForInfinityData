@@ -48,18 +48,12 @@ jobs:
         run: |
           sudo chown -R $(id -u):$(id -g) .
 
-      - name: Sort JSON
-        if: steps.binance-data-download.outcome == 'success'
-        run: |
-          # This is to avoid commiting changes just because the order changed
-          python .github/workflows/scripts/sort-json.py binance
-
       - name: Commit Binance Changed Files
         id: commit-binance-changes
         if: steps.binance-data-download.outcome == 'success'
         continue-on-error: true
         run: |
-          git add binance/*.json
+          git add binance/*.json.gz
           git commit -a -m "Update Binance exchange data from ${{ steps.binance-dates.outputs.start_date }} to ${{ steps.binance-dates.outputs.end_date }}"
 
       - name: Kucoin Backtesting Variables
@@ -83,18 +77,12 @@ jobs:
         run: |
           sudo chown -R $(id -u):$(id -g) .
 
-      - name: Sort JSON
-        if: steps.kucoin-data-download.outcome == 'success'
-        run: |
-          # This is to avoid commiting changes just because the order changed
-          python .github/workflows/scripts/sort-json.py kucoin
-
       - name: Commit Kucoin Changed Files
         id: commit-kucoin-changes
         if: steps.kucoin-data-download.outcome == 'success'
         continue-on-error: true
         run: |
-          git add kucoin/*.json
+          git add kucoin/*.json.gz
           git commit -a -m "Update Kucoin exchange data from ${{ steps.kucoin-dates.outputs.start_date }} to ${{ steps.kucoin-dates.outputs.end_date }}"
 
       - name: Push changes
