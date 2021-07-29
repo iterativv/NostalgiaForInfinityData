@@ -38,5 +38,7 @@
   },
   "pairlists": [
       {"method": "StaticPairList"}
-  ]
+  ],
+  "dataformat_ohlcv": "jsongz",
+  "dataformat_trades": "jsongz"
 }
