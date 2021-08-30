@@ -2,6 +2,7 @@
     "exchange": {
         "name": "kucoin",
         "pair_whitelist": [
+            "2CRZ/USDT",
             "AAVE/USDT",
             "ACE/USDT",
             "ADA/USDT",
@@ -13,8 +14,8 @@
             "AVAX/USDT",
             "AXS/USDT",
             "BAT/USDT",
-            "BEPRO/USDT",
             "BCH/USDT",
+            "BEPRO/USDT",
             "BOSON/USDT",
             "BTC/USDT",
             "BTT/USDT",
@@ -92,7 +93,6 @@
             "VELO/USDT",
             "VET/USDT",
             "VRA/USDT",
-            "XDC/USDT",
             "WAVES/USDT",
             "WIN/USDT",
             "XAVA/USDT",
@@ -105,8 +105,7 @@
             "YFI/USDT",
             "ZEC/USDT",
             "ZEN/USDT",
-            "ZIL/USDT",
-            "2CRZ/USDT"
+            "ZIL/USDT"
         ]
     }
 }
