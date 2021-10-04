@@ -35,12 +35,43 @@ jobs:
           path:
             backtesting-binance.env
 
-      - name: Download Binance Data (${{ steps.binance-dates.outputs.start_date }} - ${{ steps.binance-dates.outputs.end_date }})
-        id: binance-data-download
+      - name: Download Binance 5m Data (${{ steps.binance-dates.outputs.start_date }} - ${{ steps.binance-dates.outputs.end_date }})
+        id: binance-data-download-5m
         env:
           START_DATE: ${{ steps.binance-dates.outputs.start_date }}
           END_DATE: ${{ steps.binance-dates.outputs.end_date }}
           EXCHANGE: binance
+          TIMEFRAME: 5m
+        run: |
+          docker-compose run --rm download-data
+
+      - name: Download Binance 15m Data (${{ steps.binance-dates.outputs.start_date }} - ${{ steps.binance-dates.outputs.end_date }})
+        id: binance-data-download-15m
+        env:
+          START_DATE: ${{ steps.binance-dates.outputs.start_date }}
+          END_DATE: ${{ steps.binance-dates.outputs.end_date }}
+          EXCHANGE: binance
+          TIMEFRAME: 15m
+        run: |
+          docker-compose run --rm download-data
+
+      - name: Download Binance 1h Data (${{ steps.binance-dates.outputs.start_date }} - ${{ steps.binance-dates.outputs.end_date }})
+        id: binance-data-download-1h
+        env:
+          START_DATE: ${{ steps.binance-dates.outputs.start_date }}
+          END_DATE: ${{ steps.binance-dates.outputs.end_date }}
+          EXCHANGE: binance
+          TIMEFRAME: 1h
+        run: |
+          docker-compose run --rm download-data
+
+      - name: Download Binance 1d Data (${{ steps.binance-dates.outputs.start_date }} - ${{ steps.binance-dates.outputs.end_date }})
+        id: binance-data-download-1d
+        env:
+          START_DATE: ${{ steps.binance-dates.outputs.start_date }}
+          END_DATE: ${{ steps.binance-dates.outputs.end_date }}
+          EXCHANGE: binance
+          TIMEFRAME: 1d
         run: |
           docker-compose run --rm download-data
 
@@ -64,15 +95,45 @@ jobs:
           path:
             backtesting-kucoin.env
 
-      - name: Download Kucoin Data (${{ steps.kucoin-dates.outputs.start_date }} - ${{ steps.kucoin-dates.outputs.end_date }})
-        id: kucoin-data-download
+      - name: Download Kucoin 5m Data (${{ steps.kucoin-dates.outputs.start_date }} - ${{ steps.kucoin-dates.outputs.end_date }})
+        id: kucoin-data-download-5m
         env:
           START_DATE: ${{ steps.kucoin-dates.outputs.start_date }}
           END_DATE: ${{ steps.kucoin-dates.outputs.end_date }}
           EXCHANGE: kucoin
+          TIMEFRAME: 5m
         run: |
           docker-compose run --rm download-data
 
+      - name: Download Kucoin 15m Data (${{ steps.kucoin-dates.outputs.start_date }} - ${{ steps.kucoin-dates.outputs.end_date }})
+        id: kucoin-data-download-15m
+        env:
+          START_DATE: ${{ steps.kucoin-dates.outputs.start_date }}
+          END_DATE: ${{ steps.kucoin-dates.outputs.end_date }}
+          EXCHANGE: kucoin
+          TIMEFRAME: 15m
+        run: |
+          docker-compose run --rm download-data
+
+      - name: Download Kucoin 1h Data (${{ steps.kucoin-dates.outputs.start_date }} - ${{ steps.kucoin-dates.outputs.end_date }})
+        id: kucoin-data-download-1h
+        env:
+          START_DATE: ${{ steps.kucoin-dates.outputs.start_date }}
+          END_DATE: ${{ steps.kucoin-dates.outputs.end_date }}
+          EXCHANGE: kucoin
+          TIMEFRAME: 5m
+        run: |
+          docker-compose run --rm download-data
+
+      - name: Download Kucoin 1d Data (${{ steps.kucoin-dates.outputs.start_date }} - ${{ steps.kucoin-dates.outputs.end_date }})
+        id: kucoin-data-download-1d
+        env:
+          START_DATE: ${{ steps.kucoin-dates.outputs.start_date }}
+          END_DATE: ${{ steps.kucoin-dates.outputs.end_date }}
+          EXCHANGE: kucoin
+          TIMEFRAME: 5m
+        run: |
+          docker-compose run --rm download-data
       - name: Fix File Ownership
         run: |
           sudo chown -R $(id -u):$(id -g) .
