@@ -1,9 +1,9 @@
 ---
 version: '3'
 services:
-  download-data-5m:
+  download-data:
     image: freqtradeorg/freqtrade:stable
-    container_name: download-data-5m
+    container_name: download-data
     volumes:
       - ".:/freqtrade/user_data/data"
     command: >
