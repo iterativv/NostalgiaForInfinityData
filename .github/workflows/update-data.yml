@@ -55,8 +55,6 @@ jobs:
         if: steps.binance-data-download.outcome == 'success'
         continue-on-error: true
         run: |
-          ls -l binance/*.json.gz
-          git status
           git add binance/*.json.gz
           git commit -a -m "Update Binance exchange data from ${{ steps.binance-dates.outputs.start_date }} to ${{ steps.binance-dates.outputs.end_date }}"
 
