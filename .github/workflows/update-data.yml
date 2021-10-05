@@ -121,7 +121,7 @@ jobs:
           START_DATE: ${{ steps.kucoin-dates.outputs.start_date }}
           END_DATE: ${{ steps.kucoin-dates.outputs.end_date }}
           EXCHANGE: kucoin
-          TIMEFRAME: 5m
+          TIMEFRAME: 1h
         run: |
           docker-compose run --rm download-data
 
@@ -131,7 +131,7 @@ jobs:
           START_DATE: ${{ steps.kucoin-dates.outputs.start_date }}
           END_DATE: ${{ steps.kucoin-dates.outputs.end_date }}
           EXCHANGE: kucoin
-          TIMEFRAME: 5m
+          TIMEFRAME: 1d
         run: |
           docker-compose run --rm download-data
       - name: Fix File Ownership
