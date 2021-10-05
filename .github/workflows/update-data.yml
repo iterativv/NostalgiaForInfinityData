@@ -1,6 +1,6 @@
 name: Update Data
 
-on: [push]
+on: [push,workflow_dispatch]
 
 concurrency: 1
 
