@@ -36,7 +36,7 @@ jobs:
           log-variables: true
           path:
             backtesting-binance.env
-          
+
       - name: Download Binance Data (${{ steps.binance-dates.outputs.start_date }} - ${{ steps.binance-dates.outputs.end_date }})
         id: binance-data-download
         env:
