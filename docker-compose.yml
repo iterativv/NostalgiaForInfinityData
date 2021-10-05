@@ -9,7 +9,7 @@ services:
     command: >
       download-data
       --timerange ${START_DATE:-20201201}-${END_DATE:-20211001}
-      --timeframe ${TIMEFRAME:-5m}
+      --timeframe 5m 15m 1h 1d
       --datadir user_data/data/${EXCHANGE:-binance}
       --config user_data/data/pairlists.json
       --config user_data/data/${EXCHANGE:-binance}-usdt-static.json
