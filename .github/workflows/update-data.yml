@@ -46,7 +46,7 @@ jobs:
           TIMEFRAME: 1d
         run: |
           docker-compose run --rm download-data
-          ln -s binance/*.json.gz
+          ls -l binance/*.json.gz
 
       - name: Download Binance 1h Data (${{ steps.binance-dates.outputs.start_date }} - ${{ steps.binance-dates.outputs.end_date }})
         id: binance-data-download-1h
@@ -57,7 +57,7 @@ jobs:
           TIMEFRAME: 1h
         run: |
           docker-compose run --rm download-data
-          ln -s binance/*.json.gz
+          ls -l binance/*.json.gz
 
       - name: Download Binance 15m Data (${{ steps.binance-dates.outputs.start_date }} - ${{ steps.binance-dates.outputs.end_date }})
         id: binance-data-download-15m
@@ -68,7 +68,7 @@ jobs:
           TIMEFRAME: 15m
         run: |
           docker-compose run --rm download-data
-          ln -s binance/*.json.gz
+          ls -l binance/*.json.gz
           
       - name: Download Binance 5m Data (${{ steps.binance-dates.outputs.start_date }} - ${{ steps.binance-dates.outputs.end_date }})
         id: binance-data-download-5m
@@ -79,7 +79,7 @@ jobs:
           TIMEFRAME: 5m
         run: |
           docker-compose run --rm download-data
-          ln -s binance/*.json.gz
+          ls -l binance/*.json.gz
 
       - name: Fix File Ownership
         run: |
