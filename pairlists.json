@@ -9,6 +9,11 @@
   "dry_run_wallet": 1000,
   "position_adjustment_enable": true,
   "cancel_open_orders_on_exit": false,
+  "unfilledtimeout": {
+        "buy": 15,
+        "sell": 15,
+        "unit": "minutes"
+    },
   "bid_strategy": {
       "price_side": "ask",
       "ask_last_balance": 0.0,
