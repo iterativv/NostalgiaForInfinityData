@@ -7,7 +7,6 @@
   "timeframe": "5m",
   "dry_run": false,
   "dry_run_wallet": 1000,
-  "position_adjustment_enable": true,
   "cancel_open_orders_on_exit": false,
   "unfilledtimeout": {
         "buy": 15,
