@@ -1,0 +1,8 @@
+{
+    "exchange": {
+        "name": "kucoin",
+        "pair_whitelist": [
+            "AAVE/USDT"
+        ]
+    }
+}

@@ -1,0 +1,45 @@
+name: Update END_DATE Monthly
+
+on:
+  schedule:
+    - cron: '0 0 2 * *'  # Runs at 00:00 UTC on the 2nd day of each month
+  workflow_dispatch:
+
+jobs:
+  update-end-date:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set END_DATE in both .env files
+        run: |
+          FILES=("backtesting-binance-spot.env" "backtesting-kucoin-spot.env" "backtesting-binance-futures.env" "backtesting-kucoin-futures.env")
+          NEW_DATE=$(date +%Y%m01)
+          echo "Updating END_DATE to $NEW_DATE"
+          echo "NEW_DATE=$NEW_DATE" >> $GITHUB_ENV
+
+          CHANGED=false
+
+          for FILE in "${FILES[@]}"; do
+            if grep -q "^END_DATE=$NEW_DATE" "$FILE"; then
+              echo "$FILE already up to date."
+            else
+              sed -i "s/^END_DATE=.*/END_DATE=$NEW_DATE/" "$FILE"
+              echo "Updated $FILE"
+              CHANGED=true
+            fi
+          done
+
+          echo "CHANGED=$CHANGED" >> $GITHUB_ENV
+
+      - name: Commit and push changes
+        if: env.CHANGED == 'true'
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git commit -am "Update END_DATE to ${NEW_DATE} in env files"
+          git push
