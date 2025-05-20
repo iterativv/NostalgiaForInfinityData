@@ -1,0 +1,11 @@
+{
+  "exchange": {
+    "name": "binance",
+    "ccxt_async_config": {
+      "aiohttp_trust_env": true
+    },
+    "pair_whitelist": [
+      "1INCH/USDT"
+    ]
+  }
+}

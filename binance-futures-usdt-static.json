@@ -1,0 +1,31 @@
+{
+  "stake_currency": "USDT",
+  "trading_mode": "futures",
+  "margin_mode": "isolated",
+  "exchange": {
+    "name": "binance",
+    "ccxt_async_config": {
+      "aiohttp_trust_env": true
+    },
+    "pair_whitelist": [
+      "1000000MOG/USDT:USDT"
+    ]
+  },
+  "pairlists": [
+    {
+      "method": "StaticPairList"
+    }
+  ],
+  "entry_pricing": {
+    "use_order_book": true,
+    "order_book_top": 1,
+    "check_depth_of_market": {
+      "enabled": false,
+      "bids_to_ask_delta": 1
+    }
+  },
+  "exit_pricing": {
+    "use_order_book": true,
+    "order_book_top": 1
+  }
+}
