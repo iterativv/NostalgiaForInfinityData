@@ -30,12 +30,12 @@ jobs:
             tradingmode: futures
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           persist-credentials: false
           lfs: true
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: '3.13'
 
@@ -48,7 +48,7 @@ jobs:
 
       - name: ${{ matrix.exchange }} ${{ matrix.tradingmode }} Backtesting Data Variables
         id: exchange-tradingmode-dates
-        uses: falti/dotenv-action@v1.1.4
+        uses: falti/dotenv-action@v1.2.0
         with:
           log-variables: true
           path:
