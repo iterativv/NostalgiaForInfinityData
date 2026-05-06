@@ -121,6 +121,8 @@ jobs:
           done
 
   build-data-image:
+    if: always()
+    needs: Download-Exchange-Data
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -149,7 +151,7 @@ jobs:
           HELPER_TIME_FRAMES: 5m 15m 1h 4h 8h 1d
         run: |
           mkdir -p user_data/data
-          .github/workflows/scripts/download-necessary-exchange-market-data-for-backtests.sh
+          bash .github/workflows/scripts/download-necessary-exchange-market-data-for-backtests.sh
 
       - name: Log in to GHCR
         uses: docker/login-action@v4
