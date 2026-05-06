@@ -121,6 +121,8 @@ jobs:
           done
 
   build-data-image:
+    if: always()
+    needs: Download-Exchange-Data
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
